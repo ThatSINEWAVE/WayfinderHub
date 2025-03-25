@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WayfinderHub - Explore Your World</title>
+  <meta name="description" content="A beautiful map exploration tool powered by Leaflet.js">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              600: '#3b82f6',
+              700: '#2563eb',
+            },
+            dark: {
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="assets/css/leaflet.css"/>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/map.css">
+  <link rel="stylesheet" href="assets/css/context-menu.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,
+    <svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22>
+      <text y=%22.9em%22 font-size=%2290%22>🗺️</text>
+    </svg>">
+</head>
+<body class="h-screen flex flex-col bg-gray-50 dark:bg-dark-800 transition-colors duration-200">
+  <!-- Minimal Header -->
+  <header class="bg-white dark:bg-dark-700 shadow-sm z-10">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-map-marked-alt text-primary-600 text-xl"></i>
+        <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">WayfinderHub</h1>
+      </div>
+      <div class="flex items-center space-x-4">
+        <nav>
+          <ul class="flex space-x-4">
+            <li>
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-600 transition">About</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-600 transition">Features</a>
+            </li>
+          </ul>
+        </nav>
+        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+          <i class="fas fa-moon dark:hidden text-gray-600"></i>
+          <i class="fas fa-sun hidden dark:block text-yellow-300"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Full-screen Map Container -->
+  <div id="map" class="flex-1 w-full"></div>
+
+  <!-- Status Toast -->
+  <div id="toast" class="fixed bottom-4 left-4 z-20 bg-white dark:bg-dark-700 shadow-lg rounded-lg px-4 py-2 hidden items-center space-x-2">
+    <span id="toast-message"></span>
+  </div>
+
+  <!-- Context Menu -->
+  <div id="context-menu" class="fixed z-30 hidden bg-white dark:bg-dark-700 shadow-xl rounded-lg overflow-hidden w-56">
+    <div class="py-1">
+      <div class="context-menu-item" data-action="add-marker">
+        <i class="fas fa-map-marker-alt mr-2"></i> Add Marker
+      </div>
+      <div class="context-menu-item" data-action="start-route">
+        <i class="fas fa-route mr-2"></i> Start Route
+      </div>
+      <div class="context-menu-item" data-action="add-to-route" style="display: none;">
+        <i class="fas fa-plus-circle mr-2"></i> Add to Route
+      </div>
+      <div class="context-menu-item" data-action="finish-route" style="display: none;">
+        <i class="fas fa-flag-checkered mr-2"></i> Finish Route
+      </div>
+      <div class="context-menu-item" data-action="clear-route" style="display: none;">
+        <i class="fas fa-trash mr-2"></i> Clear Route
+      </div>
+      <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+      <div class="context-menu-item" data-action="center-map">
+        <i class="fas fa-crosshairs mr-2"></i> Center Here
+      </div>
+      <div class="context-menu-item" data-action="copy-coords">
+        <i class="fas fa-copy mr-2"></i> Copy Coordinates
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Custom JS -->
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
