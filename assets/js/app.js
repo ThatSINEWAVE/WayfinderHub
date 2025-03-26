@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     // Function to get browser geolocation
-    function getBrowserLocation() {
+    function getBrowserLocation(highAccuracy = false) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -58,68 +58,78 @@ document.addEventListener('DOMContentLoaded', function() {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
-                    map.setView([userLocation.lat, userLocation.lng], 12);
+                    map.setView([userLocation.lat, userLocation.lng], 14);
                     loadingIndicator.classList.add('hidden');
+
+                    // Add a user location marker
+                    if (userLocationMarker) {
+                        map.removeLayer(userLocationMarker);
+                    }
+                    userLocationMarker = L.circleMarker([userLocation.lat, userLocation.lng], {
+                        radius: 8,
+                        fillColor: "#3b82f6",
+                        color: "#fff",
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    }).addTo(map);
                 },
                 (error) => {
                     console.error("Geolocation error:", error);
-                    // Default to a known location if geolocation fails
-                    userLocation = {
-                        lat: 40.7128,
-                        lng: -74.0060
-                    }; // New York
-                    map.setView([userLocation.lat, userLocation.lng], 12);
-                    loadingIndicator.classList.add('hidden');
+                    handleGeolocationError(highAccuracy, error);
+                },
+                {
+                    enableHighAccuracy: highAccuracy,
+                    timeout: highAccuracy ? 10000 : 5000,
+                    maximumAge: highAccuracy ? 0 : 600000 // 10 minutes
                 }
             );
         } else {
             console.log("Geolocation is not supported by this browser.");
-            // Default to a known location
+            handleGeolocationError(highAccuracy);
+        }
+    }
+
+    // Handle geolocation errors with fallback options
+    function handleGeolocationError(highAccuracy, error) {
+        if (highAccuracy) {
+            // If high accuracy fails, fall back to lower accuracy or IP-based location
+            console.warn("High accuracy geolocation failed");
+            if (userLocation) {
+                map.setView([userLocation.lat, userLocation.lng], 12);
+            } else {
+                // Default to New York if no previous location
+                userLocation = {
+                    lat: 40.7128,
+                    lng: -74.0060
+                };
+                map.setView([userLocation.lat, userLocation.lng], 12);
+            }
+        } else {
+            // Set to a default location if regular geolocation fails
             userLocation = {
                 lat: 40.7128,
                 lng: -74.0060
             }; // New York
             map.setView([userLocation.lat, userLocation.lng], 12);
-            loadingIndicator.classList.add('hidden');
         }
+        loadingIndicator.classList.add('hidden');
     }
 
     // Function to center map on user location
     function centerOnUserLocation() {
-        if (userLocation) {
-            map.flyTo([userLocation.lat, userLocation.lng], 14, {
-                duration: 1,
-                easeLinearity: 0.25
-            });
+        // Show loading indicator
+        loadingIndicator.classList.remove('hidden');
 
-            // Add a pulsing effect to the locate button
-            locateBtn.classList.add('locate-active');
-            setTimeout(() => {
-                locateBtn.classList.remove('locate-active');
-            }, 2000);
+        // Request high accuracy location
+        getBrowserLocation(true);
 
-            // Add a temporary marker if one doesn't exist
-            if (!userLocationMarker) {
-                userLocationMarker = L.circleMarker([userLocation.lat, userLocation.lng], {
-                    radius: 8,
-                    fillColor: "#3b82f6",
-                    color: "#fff",
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                }).addTo(map);
-
-                // Remove the marker after 5 seconds
-                setTimeout(() => {
-                    if (userLocationMarker) {
-                        map.removeLayer(userLocationMarker);
-                        userLocationMarker = null;
-                    }
-                }, 5000);
-            }
-        } else {
-            alert("Your location is not available. Please try again later.");
-        }
+        // Add a pulsing effect to the locate button
+        locateBtn.classList.add('locate-active');
+        setTimeout(() => {
+            locateBtn.classList.remove('locate-active');
+            loadingIndicator.classList.add('hidden');
+        }, 2000);
     }
 
     // Event listeners for map controls
