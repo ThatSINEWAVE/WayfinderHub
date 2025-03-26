@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
         maxZoom: 19
     }).addTo(map);
 
+    // Remove default zoom controls
+    map.zoomControl.remove();
+
     // Variables to track markers and user location
     let userLocation = null;
     let userLocationMarker = null;
@@ -24,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchHistoryContainer = document.getElementById('search-history');
     const clearSearchBtn = document.getElementById('clear-search');
     const clearSearchHistoryBtn = document.getElementById('clear-search-history');
-    const locateBtn = document.getElementById('locate-btn');
     const zoomInBtn = document.getElementById('zoom-in');
     const zoomOutBtn = document.getElementById('zoom-out');
     const centerMapBtn = document.getElementById('center-map');
@@ -147,8 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 (error) => {
                     console.error("Geolocation error:", error);
                     handleGeolocationError(highAccuracy, error);
-                },
-                {
+                }, {
                     enableHighAccuracy: highAccuracy,
                     timeout: highAccuracy ? 10000 : 5000,
                     maximumAge: highAccuracy ? 0 : 600000 // 10 minutes
@@ -194,16 +195,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Request high accuracy location
         getBrowserLocation(true);
 
-        // Add a pulsing effect to the locate button
-        locateBtn.classList.add('locate-active');
+        // Add a pulsing effect to the center map button
+        centerMapBtn.classList.add('locate-active');
         setTimeout(() => {
-            locateBtn.classList.remove('locate-active');
+            centerMapBtn.classList.remove('locate-active');
             loadingIndicator.classList.add('hidden');
         }, 2000);
     }
 
     // Event listeners for map controls
-    locateBtn.addEventListener('click', centerOnUserLocation);
+    centerMapBtn.addEventListener('click', centerOnUserLocation);
 
     zoomInBtn.addEventListener('click', () => {
         map.zoomIn();
@@ -211,14 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     zoomOutBtn.addEventListener('click', () => {
         map.zoomOut();
-    });
-
-    centerMapBtn.addEventListener('click', () => {
-        if (searchMarker) {
-            map.flyTo(searchMarker.getLatLng(), map.getZoom());
-        } else if (userLocation) {
-            map.flyTo([userLocation.lat, userLocation.lng], map.getZoom());
-        }
     });
 
     removeMarkerBtn.addEventListener('click', () => {
@@ -289,12 +282,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Determine location type and icon
                     const getLocationIcon = (type) => {
-                        switch(type) {
-                            case 'city': return 'fas fa-city';
-                            case 'village': return 'fas fa-home';
-                            case 'country': return 'fas fa-globe';
-                            case 'administrative': return 'fas fa-map-marker-alt';
-                            default: return 'fas fa-map-pin';
+                        switch (type) {
+                            case 'city':
+                                return 'fas fa-city';
+                            case 'village':
+                                return 'fas fa-home';
+                            case 'country':
+                                return 'fas fa-globe';
+                            case 'administrative':
+                                return 'fas fa-map-marker-alt';
+                            default:
+                                return 'fas fa-map-pin';
                         }
                     };
 

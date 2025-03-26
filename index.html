@@ -13,25 +13,53 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon for all browsers -->
+  <link rel="icon" href="images/favicons/favicon.ico" type="image/x-icon">
+  <!-- Apple Touch Icons (for iOS home screen bookmarks) -->
+  <link rel="apple-touch-icon" sizes="57x57" href="images/apple/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="images/apple/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="images/apple/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="images/apple/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="images/apple/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="images/apple/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple/apple-icon-180x180.png">
+  <!-- Favicons for different devices -->
+  <link rel="icon" type="image/png" sizes="192x192" href="images/android/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="images/favicons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
+  <!-- Web Manifest -->
+  <link rel="manifest" href="site-data/site.manifest">
+  <!-- Windows-specific tiles (for pinned sites in Windows Start menu) -->
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="images/microsoft/ms-icon-144x144.png">
+  <!-- Defines the color of the browser UI elements -->
+  <meta name="theme-color" content="#ffffff">
+  <!-- Open Graph Meta Tags (for social media sharing, mainly Facebook) -->
+  <meta property="og:title" content="WayfinderHub - Home">
+  <meta property="og:description" content="A beautiful map exploration tool powered by Leaflet.js">
+  <meta property="og:image" content="https://raw.githubusercontent.com/ThatSINEWAVE/WayfinderHub/refs/heads/main/docs/images/social-share/WayfinderHub-Home.png">
+  <meta property="og:url" content="https://thatsinewave.github.io/WayfinderHub/index.html">
+  <meta property="og:type" content="website">
+  <!-- Twitter Card Meta Tags (for better sharing on Twitter) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WayfinderHub - Home">
+  <meta name="twitter:description" content="A beautiful map exploration tool powered by Leaflet.js">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/ThatSINEWAVE/WayfinderHub/refs/heads/main/docs/images/social-share/WayfinderHub-Home.png">
   </head>
   <body class="bg-gray-50 font-inter overflow-hidden">
-    <!-- Header with Hamburger Menu and Logo -->
+    <!-- Header with Hamburger Menu -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
-      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-          <button id="toggle-sidebar" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-300">
-            <div class="hamburger-btn w-6 h-6 flex flex-col justify-center items-center space-y-1.5 group">
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
-            </div>
-          </button>
-        </div>
-        <div class="actions-container flex items-center space-x-1">
-          <button id="locate-btn" class="locate-circle w-10 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center group">
-            <i class="fas fa-location-arrow group-hover:animate-pulse"></i>
-          </button>
-        </div>
+      <div class="flex items-center justify-start px-4 py-3">
+        <button id="toggle-sidebar" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-300 ml-0">
+          <span class="hamburger-btn flex flex-col justify-center items-center space-y-1.5 group w-6 h-6">
+            <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+            <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+            <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+          </span>
+        </button>
       </div>
     </header>
     <!-- Sidebar -->
@@ -54,9 +82,7 @@
         <div>
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-700">Recent Searches</h2>
-            <button id="clear-search-history" class="text-sm text-red-500 hover:text-red-600 transition-colors">
-              Clear History
-            </button>
+            <button id="clear-search-history" class="text-sm text-red-500 hover:text-red-600 transition-colors"> Clear History </button>
           </div>
           <div id="search-history" class="space-y-2">
             <!-- Search history items will be dynamically added here -->
@@ -78,8 +104,8 @@
         <i class="fas fa-minus text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
       </button>
       <div class="border-t border-gray-200 w-full"></div>
-      <button id="center-map" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
-        <i class="fas fa-crosshairs text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
+      <button id="center-map" class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all duration-300 group">
+        <i class="fas fa-location-arrow text-sm group-hover:animate-pulse"></i>
       </button>
     </div>
     <!-- Remove Marker Button -->
