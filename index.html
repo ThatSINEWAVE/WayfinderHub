@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WayfinderHub - Global Exploration</title>
     <meta name="description" content="An intuitive mapping application for global exploration">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <!-- Google Fonts -->
@@ -15,22 +13,34 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   </head>
   <body class="bg-gray-50 font-inter overflow-hidden">
-    <!-- Header -->
+    <!-- Header with Hamburger Menu and Logo -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
-      <div class="container mx-auto px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center">
-        <div class="logo-container flex items-center space-x-3">
-          <div class="logo-circle w-10 h-10 md:w-12 md:h-12 bg-blue-600 text-white flex items-center justify-center rounded-full shadow-md">
-            <i class="fas fa-map-marked-alt text-lg md:text-xl"></i>
-          </div>
-          <h1 class="text-2xl font-bold text-gray-800 tracking-tight hidden md:block">WayfinderHub</h1>
+      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <button id="toggle-sidebar" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-300">
+            <div class="hamburger-btn w-6 h-6 flex flex-col justify-center items-center space-y-1.5 group">
+              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+              <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300 group-hover:bg-blue-600"></span>
+            </div>
+          </button>
         </div>
-        <div class="search-container mx-2 md:mx-8 justify-self-center max-w-2xl w-full">
-          <div class="relative">
-            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-2 md:py-3 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 transition-all duration-300 ease-in-out text-sm md:text-base" placeholder="Search places...">
+        <div class="actions-container flex items-center space-x-1">
+          <button id="locate-btn" class="locate-circle w-10 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center group">
+            <i class="fas fa-location-arrow group-hover:animate-pulse"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed top-0 left-0 bottom-0 w-80 bg-white shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+      <div class="p-6 pt-16">
+        <!-- Search Container -->
+        <div class="mb-6">
+          <div class="relative w-full">
+            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-3 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 transition-all duration-300 ease-in-out" placeholder="Search places...">
             <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
               <i class="fas fa-search"></i>
             </div>
@@ -38,44 +48,57 @@
               <i class="fas fa-times"></i>
             </button>
           </div>
-          <div id="search-results" class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 hidden max-h-96 overflow-y-auto divide-y divide-gray-100"></div>
+          <div id="search-results" class="mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 max-h-96 overflow-y-auto divide-y divide-gray-100"></div>
         </div>
-        <div class="actions-container flex items-center space-x-3 justify-self-end">
-          <button id="locate-btn" class="locate-circle w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center group">
-            <i class="fas fa-location-arrow group-hover:animate-pulse"></i>
-          </button>
+        <!-- Search History Section -->
+        <div>
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-700">Recent Searches</h2>
+            <button id="clear-search-history" class="text-sm text-red-500 hover:text-red-600 transition-colors">
+              Clear History
+            </button>
+          </div>
+          <div id="search-history" class="space-y-2">
+            <!-- Search history items will be dynamically added here -->
+          </div>
         </div>
       </div>
-    </header>
+    </div>
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-35 opacity-0 pointer-events-none transition-opacity duration-300"></div>
     <!-- Map Container -->
     <div id="map" class="fixed top-16 bottom-0 left-0 right-0 z-0"></div>
     <!-- Map Controls -->
-    <div class="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-40 space-y-2 md:space-y-3 bg-white/90 backdrop-blur-md rounded-xl shadow-2xl p-1 md:p-2">
-      <button id="zoom-in" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
-        <i class="fas fa-plus text-gray-700 text-sm md:text-base group-hover:scale-110 transition-transform"></i>
+    <div class="fixed bottom-4 right-4 z-40 space-y-2 bg-white/90 backdrop-blur-md rounded-xl shadow-2xl p-1">
+      <button id="zoom-in" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
+        <i class="fas fa-plus text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
       </button>
-      <div class="border-t border-gray-200 w-full hidden md:block"></div>
-      <button id="zoom-out" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
-        <i class="fas fa-minus text-gray-700 text-sm md:text-base group-hover:scale-110 transition-transform"></i>
+      <div class="border-t border-gray-200 w-full"></div>
+      <button id="zoom-out" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
+        <i class="fas fa-minus text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
       </button>
-      <div class="border-t border-gray-200 w-full hidden md:block"></div>
-      <button id="center-map" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
-        <i class="fas fa-crosshairs text-gray-700 text-sm md:text-base group-hover:scale-110 transition-transform"></i>
+      <div class="border-t border-gray-200 w-full"></div>
+      <button id="center-map" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 group">
+        <i class="fas fa-crosshairs text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
       </button>
     </div>
     <!-- Remove Marker Button -->
-    <button id="remove-marker" class="fixed bottom-4 md:bottom-6 left-4 md:left-6 z-40 px-3 py-2 md:px-4 md:py-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center space-x-2 hidden">
-      <i class="fas fa-trash-alt text-red-500 text-sm md:text-base"></i>
-      <span class="text-gray-700 text-xs md:text-sm">Remove Marker</span>
+    <button id="remove-marker" class="fixed bottom-4 left-4 z-40 px-3 py-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center space-x-2 hidden">
+      <i class="fas fa-trash-alt text-red-500 text-sm"></i>
+      <span class="text-gray-700 text-xs">Remove Marker</span>
     </button>
     <!-- Loading Indicator -->
     <div id="loading" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-      <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl flex flex-col items-center space-y-4">
-        <div class="animate-spin rounded-full h-10 w-10 md:h-12 md:w-12 border-t-4 border-b-4 border-blue-500"></div>
-        <span class="text-gray-700 font-semibold tracking-wide text-sm md:text-base">Discovering Your Location...</span>
+      <div class="bg-white p-6 rounded-2xl shadow-2xl flex flex-col items-center space-y-4">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-blue-500"></div>
+        <span class="text-gray-700 font-semibold tracking-wide text-sm">Discovering Your Location...</span>
       </div>
     </div>
     <!-- Custom JS -->
     <script src="assets/js/app.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet JS -->
+    <script src="assets/js/leaflet.js"></script>
   </body>
 </html>
