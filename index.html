@@ -21,28 +21,26 @@
   <body class="bg-gray-50 font-inter overflow-hidden">
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
-      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
+      <div class="container mx-auto px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center">
+        <div class="logo-container flex items-center space-x-3">
           <div class="logo-circle w-10 h-10 md:w-12 md:h-12 bg-blue-600 text-white flex items-center justify-center rounded-full shadow-md">
             <i class="fas fa-map-marked-alt text-lg md:text-xl"></i>
           </div>
           <h1 class="text-2xl font-bold text-gray-800 tracking-tight hidden md:block">WayfinderHub</h1>
         </div>
-        <div class="flex-grow mx-2 md:mx-8">
-          <div class="relative max-w-2xl mx-auto">
-            <div class="relative">
-              <input type="text" id="search-box" class="w-full pl-10 pr-12 py-2 md:py-3 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 transition-all duration-300 ease-in-out text-sm md:text-base" placeholder="Search places...">
-              <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <i class="fas fa-search"></i>
-              </div>
-              <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden transition-colors">
-                <i class="fas fa-times"></i>
-              </button>
+        <div class="search-container mx-2 md:mx-8 justify-self-center max-w-2xl w-full">
+          <div class="relative">
+            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-2 md:py-3 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 transition-all duration-300 ease-in-out text-sm md:text-base" placeholder="Search places...">
+            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <i class="fas fa-search"></i>
             </div>
-            <div id="search-results" class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 hidden max-h-96 overflow-y-auto divide-y divide-gray-100"></div>
+            <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden transition-colors">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+          <div id="search-results" class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 hidden max-h-96 overflow-y-auto divide-y divide-gray-100"></div>
         </div>
-        <div class="flex items-center space-x-3">
+        <div class="actions-container flex items-center space-x-3 justify-self-end">
           <button id="locate-btn" class="locate-circle w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center group">
             <i class="fas fa-location-arrow group-hover:animate-pulse"></i>
           </button>

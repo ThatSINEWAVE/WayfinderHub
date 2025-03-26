@@ -26,6 +26,30 @@ body {
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Centered Search Bar for Desktop */
+@media (min-width: 769px) {
+	header .container {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+	}
+
+	header .logo-container {
+		justify-self: start;
+	}
+
+	header .search-container {
+		justify-self: center;
+		max-width: 600px;
+		width: 100%;
+		margin-left: -150px;
+	}
+
+	header .actions-container {
+		justify-self: end;
+	}
+}
+
 /* Responsive Sizing */
 @media (max-width: 768px) {
 
@@ -33,6 +57,8 @@ body {
 	.locate-circle {
 		width: 2.5rem;
 		height: 2.5rem;
+		margin-left: 10px;
+		margin-right: 10px;
 	}
 
 	.logo-circle i,
