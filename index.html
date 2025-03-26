@@ -49,9 +49,9 @@
     <meta name="twitter:description" content="A beautiful map exploration tool powered by Leaflet.js">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/ThatSINEWAVE/WayfinderHub/refs/heads/main/docs/images/social-share/WayfinderHub-Home.png">
   </head>
-  <body class="bg-gray-50 font-inter overflow-hidden">
+  <body class="bg-gray-50 dark:bg-gray-900 font-inter overflow-hidden">
     <!-- Header with Hamburger Menu -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md dark:bg-gray-800/90 dark:shadow-gray-900/20 transition-colors duration-300">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-md dark:shadow-gray-900/20 transition-colors duration-300">
       <div class="flex items-center justify-between px-4 py-3">
         <div class="flex items-center space-x-3">
           <!-- Hamburger Menu Button -->
@@ -69,7 +69,7 @@
           </div>
         </div>
         <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="relative h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
+        <button id="theme-toggle" class="h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
           <span class="theme-icon absolute inset-0 flex items-center justify-center transition-all duration-500">
             <i class="fas fa-sun text-yellow-400 opacity-100 dark:opacity-0 dark:rotate-90"></i>
             <i class="fas fa-moon text-blue-300 opacity-0 dark:opacity-100 absolute dark:rotate-0 rotate-90"></i>
@@ -78,12 +78,12 @@
       </div>
     </header>
     <!-- Sidebar -->
-    <div id="sidebar" class="fixed top-0 left-0 bottom-0 w-80 bg-white shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto dark:bg-gray-800 dark:shadow-gray-900/20">
+    <div id="sidebar" class="fixed top-0 left-0 bottom-0 w-80 bg-white dark:bg-gray-800 shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto dark:border-r dark:border-gray-700">
       <div class="p-6 pt-16">
         <!-- Search Container -->
         <div class="mb-6">
           <div class="relative w-full">
-            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-3 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 transition-all duration-300 ease-in-out" placeholder="Search places...">
+            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-3 rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 dark:text-gray-200 dark:bg-gray-700 transition-all duration-300 ease-in-out" placeholder="Search places...">
             <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300">
               <i class="fas fa-search"></i>
             </div>
@@ -108,9 +108,9 @@
     <!-- Sidebar Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-35 opacity-0 pointer-events-none transition-opacity duration-300"></div>
     <!-- Map Container -->
-    <div id="map" class="fixed top-16 bottom-0 left-0 right-0 z-0"></div>
+    <div id="map" class="fixed top-16 bottom-0 left-0 right-0 z-0 dark:bg-gray-900"></div>
     <!-- Map Controls -->
-    <div class="fixed bottom-4 right-4 z-40 space-y-2 bg-white/90 backdrop-blur-md rounded-xl shadow-2xl p-1 dark:bg-gray-800/90 dark:shadow-gray-900/20">
+    <div class="fixed bottom-4 right-4 z-40 space-y-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-2xl p-1 dark:shadow-gray-900/20">
       <button id="zoom-in" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-700 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 group">
         <i class="fas fa-plus text-gray-700 dark:text-gray-200 text-sm group-hover:scale-110 transition-transform"></i>
       </button>

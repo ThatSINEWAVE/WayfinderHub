@@ -1,15 +1,59 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the map
-    const map = L.map('map').setView([0, 0], 2);
+    // Initialize the map with dark mode detection
+    const map = L.map('map', {
+        zoomControl: false,
+        preferCanvas: true,
+        attributionControl: false
+    }).setView([0, 0], 2);
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19
-    }).addTo(map);
+    // Store the current tile layer reference
+    let currentTileLayer = null;
+    let mapInitialized = false;
 
-    // Remove default zoom controls
-    map.zoomControl.remove();
+    // Add appropriate tile layer based on theme
+    function updateMapTheme() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const mapContainer = document.getElementById('map');
+
+        // Remove all existing tile layers
+        if (currentTileLayer) {
+            map.removeLayer(currentTileLayer);
+        }
+
+        // Add new tile layer based on theme
+        if (isDark) {
+            currentTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                maxZoom: 19,
+                subdomains: 'abcd'
+            }).addTo(map);
+
+            // Add dark mode class to map container
+            mapContainer.classList.add('dark');
+        } else {
+            currentTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Remove dark mode class from map container
+            mapContainer.classList.remove('dark');
+        }
+
+        // Force a complete redraw of the map if it's already initialized
+        if (mapInitialized) {
+            setTimeout(() => {
+                map.invalidateSize(true);
+                if (map._renderer) {
+                    map._renderer._update();
+                }
+            }, 100);
+        }
+    }
+
+    // Initialize with current theme
+    updateMapTheme();
+    mapInitialized = true;
 
     // Variables to track markers and user location
     let userLocation = null;
@@ -48,12 +92,16 @@ document.addEventListener('DOMContentLoaded', function() {
             html.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         }
+
+        // Update map theme when toggling
+        updateMapTheme();
     }
 
     // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
+        document.getElementById('map').classList.add('dark');
     }
 
     // Sidebar Toggle Functionality
@@ -66,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleSidebarBtn.classList.toggle('active');
     }
 
-    // Rest of your existing code...
-    // (All the existing functions remain the same, just make sure to include them)
     // Search History Management
     function saveSearchToHistory(location) {
         // Check if the exact same location already exists
@@ -93,9 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
         searchHistoryContainer.innerHTML = '';
         searchHistory.forEach(item => {
             const historyItem = document.createElement('div');
-            historyItem.classList.add('bg-gray-100', 'rounded-lg', 'p-3', 'flex', 'items-center', 'space-x-3', 'cursor-pointer', 'hover:bg-gray-200', 'transition');
+            historyItem.classList.add('bg-gray-100', 'dark:bg-gray-700', 'rounded-lg', 'p-3', 'flex', 'items-center', 'space-x-3', 'cursor-pointer', 'hover:bg-gray-200', 'dark:hover:bg-gray-600', 'transition');
             historyItem.innerHTML = `
-                <i class="fas fa-history text-gray-500"></i>
+                <i class="fas fa-history text-gray-500 dark:text-gray-400"></i>
                 <div>
                     <p class="text-sm font-medium text-gray-700 dark:text-gray-200">${item.display_name.split(',')[0]}</p>
                     <small class="text-xs text-gray-500 dark:text-gray-400">${item.display_name.split(',').slice(1).join(',').trim()}</small>
