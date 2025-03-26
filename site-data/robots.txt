@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thatsinewave.github.io/WayfinderHub/site-data/sitemap.xml
