@@ -64,7 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 (error) => {
                     console.error("Geolocation error:", error);
                     // Default to a known location if geolocation fails
-                    userLocation = { lat: 40.7128, lng: -74.0060 }; // New York
+                    userLocation = {
+                        lat: 40.7128,
+                        lng: -74.0060
+                    }; // New York
                     map.setView([userLocation.lat, userLocation.lng], 12);
                     loadingIndicator.classList.add('hidden');
                 }
@@ -72,7 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             console.log("Geolocation is not supported by this browser.");
             // Default to a known location
-            userLocation = { lat: 40.7128, lng: -74.0060 }; // New York
+            userLocation = {
+                lat: 40.7128,
+                lng: -74.0060
+            }; // New York
             map.setView([userLocation.lat, userLocation.lng], 12);
             loadingIndicator.classList.add('hidden');
         }
@@ -169,7 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function debounce(func, wait) {
         let timeout;
         return function() {
-            const context = this, args = arguments;
+            const context = this,
+                args = arguments;
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 func.apply(context, args);
