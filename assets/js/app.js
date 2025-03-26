@@ -40,15 +40,21 @@ document.addEventListener('DOMContentLoaded', function() {
             mapContainer.classList.remove('dark');
         }
 
-        // Force a complete redraw of the map if it's already initialized
-        if (mapInitialized) {
-            setTimeout(() => {
-                map.invalidateSize(true);
-                if (map._renderer) {
-                    map._renderer._update();
-                }
-            }, 100);
-        }
+        // Force a complete redraw of the map after a short delay
+        setTimeout(() => {
+            map.invalidateSize(true);
+            // If the map has a renderer, force an update
+            if (map._renderer) {
+                map._renderer._update();
+            }
+
+            // Trigger a reposition to ensure everything is rendered correctly
+            if (map.getCenter()) {
+                map.setView(map.getCenter(), map.getZoom(), {
+                    animate: false
+                });
+            }
+        }, 50);
     }
 
     // Initialize with current theme
