@@ -1,6 +1,7 @@
 /* Global Styles */
 body {
 	font-family: 'Inter', sans-serif;
+	@apply bg-gray-50 dark: bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
 }
 
 /* Map Container */
@@ -59,6 +60,7 @@ body {
 	transition: transform 0.3s ease-in-out;
 	box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
 	overflow-y: auto;
+	@apply dark: bg-gray-800 dark:shadow-gray-900/20;
 }
 
 #sidebar.open {
@@ -98,6 +100,7 @@ header {
 	z-index: 50;
 	background-color: white;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	@apply dark: bg-gray-800 dark:shadow-gray-900/20;
 }
 
 header h1 {
@@ -120,6 +123,17 @@ header img {
 
 header img:hover {
 	transform: scale(1.1);
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+	position: relative;
+	width: 2.5rem;
+	height: 2.5rem;
+}
+
+.theme-icon i {
+	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Centered Search Bar for Desktop */
@@ -223,6 +237,7 @@ header img:hover {
 
 #toggle-sidebar:hover {
 	background-color: rgba(0, 0, 0, 0.05);
+	@apply dark: bg-gray-700;
 }
 
 /* Ensure header logo matches sidebar logo */
@@ -238,6 +253,7 @@ header h1,
 	font-size: 1.25rem;
 	font-weight: 700;
 	color: #1f2937;
+	@apply dark: text-gray-100;
 }
 
 /* Search Results Styling */
@@ -251,6 +267,7 @@ header h1,
 	animation: fadeIn 0.3s ease-out;
 	border: 1px solid rgba(0, 0, 0, 0.05);
 	background-color: white;
+	@apply dark: bg-gray-700 dark:border-gray-600;
 }
 
 .search-container {
@@ -280,6 +297,7 @@ header h1,
 	font-size: 0.875rem;
 	position: relative;
 	overflow: hidden;
+	@apply dark: text-gray-200;
 }
 
 #search-results a::before {
@@ -323,6 +341,7 @@ header h1,
 	color: #6b7280;
 	font-size: 0.75rem;
 	margin-top: 0.25rem;
+	@apply dark: text-gray-400;
 }
 
 #search-results .no-results {
@@ -330,6 +349,7 @@ header h1,
 	text-align: center;
 	color: #6b7280;
 	font-style: italic;
+	@apply dark: text-gray-400;
 }
 
 /* Map Controls */
@@ -339,6 +359,7 @@ header h1,
 	padding: 0.5rem;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s ease;
+	@apply dark: bg-gray-700;
 }
 
 #map-controls button:hover {
@@ -406,6 +427,7 @@ header h1,
 #search-results::-webkit-scrollbar-track {
 	background: #f1f1f1;
 	border-radius: 10px;
+	@apply dark: bg-gray-600;
 }
 
 #search-results::-webkit-scrollbar-thumb {

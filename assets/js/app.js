@@ -32,6 +32,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const centerMapBtn = document.getElementById('center-map');
     const removeMarkerBtn = document.getElementById('remove-marker');
     const loadingIndicator = document.getElementById('loading');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+
+    // Theme Toggle Functionality
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+
+        if (isDark) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    }
 
     // Sidebar Toggle Functionality
     toggleSidebarBtn.addEventListener('click', toggleSidebar);
@@ -43,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleSidebarBtn.classList.toggle('active');
     }
 
+    // Rest of your existing code...
+    // (All the existing functions remain the same, just make sure to include them)
     // Search History Management
     function saveSearchToHistory(location) {
         // Check if the exact same location already exists
@@ -72,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
             historyItem.innerHTML = `
                 <i class="fas fa-history text-gray-500"></i>
                 <div>
-                    <p class="text-sm font-medium text-gray-700">${item.display_name.split(',')[0]}</p>
-                    <small class="text-xs text-gray-500">${item.display_name.split(',').slice(1).join(',').trim()}</small>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-200">${item.display_name.split(',')[0]}</p>
+                    <small class="text-xs text-gray-500 dark:text-gray-400">${item.display_name.split(',').slice(1).join(',').trim()}</small>
                 </div>
             `;
             historyItem.addEventListener('click', () => {
