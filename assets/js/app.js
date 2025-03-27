@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add appropriate tile layer based on theme
     function updateMapTheme() {
         const isDark = document.documentElement.classList.contains('dark');
-        const mapContainer = document.getElementById('map');
 
         // Remove all existing tile layers
         if (currentTileLayer) {
@@ -25,36 +24,20 @@ document.addEventListener('DOMContentLoaded', function() {
             currentTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 maxZoom: 19,
-                subdomains: 'abcd'
+                subdomains: 'abcd',
+                className: 'carto-dark-tile'
             }).addTo(map);
-
-            // Add dark mode class to map container
-            mapContainer.classList.add('dark');
         } else {
             currentTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19
             }).addTo(map);
-
-            // Remove dark mode class from map container
-            mapContainer.classList.remove('dark');
         }
 
-        // Force a complete redraw of the map after a short delay
+        // Invalidate size after a brief delay to ensure tiles are loaded
         setTimeout(() => {
-            map.invalidateSize(true);
-            // If the map has a renderer, force an update
-            if (map._renderer) {
-                map._renderer._update();
-            }
-
-            // Trigger a reposition to ensure everything is rendered correctly
-            if (map.getCenter()) {
-                map.setView(map.getCenter(), map.getZoom(), {
-                    animate: false
-                });
-            }
-        }, 50);
+            map.invalidateSize({ pan: false });
+        }, 100);
     }
 
     // Initialize with current theme
@@ -65,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let userLocation = null;
     let userLocationMarker = null;
     let searchMarker = null;
-    let geocoder;
     let searchHistory = [];
 
     // UI Elements
@@ -107,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
-        document.getElementById('map').classList.add('dark');
     }
 
     // Sidebar Toggle Functionality
@@ -115,28 +96,28 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebarOverlay.addEventListener('click', toggleSidebar);
 
     function toggleSidebar() {
-        sidebar.classList.toggle('open');
-        sidebarOverlay.classList.toggle('visible');
-        toggleSidebarBtn.classList.toggle('active');
+        const isOpen = sidebar.classList.toggle('open');
+        sidebarOverlay.classList.toggle('visible', isOpen);
+        toggleSidebarBtn.classList.toggle('active', isOpen);
+
+        // Close search results when sidebar closes
+        if (!isOpen) {
+            searchResults.classList.add('hidden');
+        }
     }
 
     // Search History Management
     function saveSearchToHistory(location) {
-        // Check if the exact same location already exists
         const existingIndex = searchHistory.findIndex(item =>
             item.display_name === location.display_name
         );
 
-        // If it exists, remove the existing entry
         if (existingIndex !== -1) {
             searchHistory.splice(existingIndex, 1);
         }
 
-        // Add to beginning of array, limiting to 5 items
         searchHistory.unshift(location);
         searchHistory = searchHistory.slice(0, 5);
-
-        // Update local storage
         localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
         renderSearchHistory();
     }
@@ -189,12 +170,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 map.setView([userLocation.lat, userLocation.lng], 12);
                 loadingIndicator.classList.add('hidden');
             } else {
-                // Fall back to browser geolocation if IP lookup fails
                 getBrowserLocation();
             }
         })
         .catch(() => {
-            // If IP lookup fails, use browser geolocation
             getBrowserLocation();
         });
 
@@ -210,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     map.setView([userLocation.lat, userLocation.lng], 14);
                     loadingIndicator.classList.add('hidden');
 
-                    // Add a user location marker
                     if (userLocationMarker) {
                         map.removeLayer(userLocationMarker);
                     }
@@ -229,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, {
                     enableHighAccuracy: highAccuracy,
                     timeout: highAccuracy ? 10000 : 5000,
-                    maximumAge: highAccuracy ? 0 : 600000 // 10 minutes
+                    maximumAge: highAccuracy ? 0 : 600000
                 }
             );
         } else {
@@ -238,15 +216,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Handle geolocation errors with fallback options
+    // Handle geolocation errors
     function handleGeolocationError(highAccuracy, error) {
         if (highAccuracy) {
-            // If high accuracy fails, fall back to lower accuracy or IP-based location
-            console.warn("High accuracy geolocation failed");
             if (userLocation) {
                 map.setView([userLocation.lat, userLocation.lng], 12);
             } else {
-                // Default to New York if no previous location
                 userLocation = {
                     lat: 40.7128,
                     lng: -74.0060
@@ -254,11 +229,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 map.setView([userLocation.lat, userLocation.lng], 12);
             }
         } else {
-            // Set to a default location if regular geolocation fails
             userLocation = {
                 lat: 40.7128,
                 lng: -74.0060
-            }; // New York
+            };
             map.setView([userLocation.lat, userLocation.lng], 12);
         }
         loadingIndicator.classList.add('hidden');
@@ -266,13 +240,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to center map on user location
     function centerOnUserLocation() {
-        // Show loading indicator
         loadingIndicator.classList.remove('hidden');
-
-        // Request high accuracy location
         getBrowserLocation(true);
-
-        // Add a pulsing effect to the center map button
         centerMapBtn.classList.add('locate-active');
         setTimeout(() => {
             centerMapBtn.classList.remove('locate-active');
@@ -282,14 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listeners for map controls
     centerMapBtn.addEventListener('click', centerOnUserLocation);
-
-    zoomInBtn.addEventListener('click', () => {
-        map.zoomIn();
-    });
-
-    zoomOutBtn.addEventListener('click', () => {
-        map.zoomOut();
-    });
+    zoomInBtn.addEventListener('click', () => map.zoomIn());
+    zoomOutBtn.addEventListener('click', () => map.zoomOut());
 
     removeMarkerBtn.addEventListener('click', () => {
         if (searchMarker) {
@@ -308,7 +271,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Search box functionality
     searchBox.addEventListener('input', debounce(handleSearchInput, 300));
-
     searchBox.addEventListener('focus', () => {
         if (searchBox.value.trim() !== '') {
             searchResults.classList.remove('hidden');
@@ -321,23 +283,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Debounce function to limit API calls during typing
+    // Debounce function
     function debounce(func, wait) {
         let timeout;
         return function() {
             const context = this,
                 args = arguments;
             clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                func.apply(context, args);
-            }, wait);
+            timeout = setTimeout(() => func.apply(context, args), wait);
         };
     }
 
     // Handle search input
     async function handleSearchInput() {
         const query = searchBox.value.trim();
-
         if (query === '') {
             searchResults.classList.add('hidden');
             clearSearchBtn.classList.add('hidden');
@@ -352,12 +311,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.length > 0) {
                 searchResults.innerHTML = '';
-                data.forEach((item, index) => {
+                data.forEach(item => {
                     const resultItem = document.createElement('a');
                     resultItem.href = '#';
                     resultItem.tabIndex = 0;
 
-                    // Determine location type and icon
                     const getLocationIcon = (type) => {
                         switch (type) {
                             case 'city':
@@ -393,33 +351,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         handleSearchResultSelection(item);
                     });
 
-                    // Keyboard support
                     resultItem.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') {
-                            handleSearchResultSelection(item);
-                        }
+                        if (e.key === 'Enter') handleSearchResultSelection(item);
                     });
 
                     searchResults.appendChild(resultItem);
                 });
                 searchResults.classList.remove('hidden');
             } else {
-                searchResults.innerHTML = `
-                    <div class="no-results">
-                        <p>No results found for "${query}"</p>
-                        <small>Try a different search term</small>
-                    </div>
-                `;
+                searchResults.innerHTML = `<div class="no-results"><p>No results found for "${query}"</p><small>Try a different search term</small></div>`;
                 searchResults.classList.remove('hidden');
             }
         } catch (error) {
             console.error('Search error:', error);
-            searchResults.innerHTML = `
-                <div class="no-results text-red-500">
-                    <p>Error fetching results</p>
-                    <small>Please try again later</small>
-                </div>
-            `;
+            searchResults.innerHTML = `<div class="no-results text-red-500"><p>Error fetching results</p><small>Please try again later</small></div>`;
             searchResults.classList.remove('hidden');
         }
     }
@@ -429,34 +374,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const lat = parseFloat(item.lat);
         const lng = parseFloat(item.lon);
 
-        // Close search results and sidebar
         searchBox.value = item.display_name;
         searchResults.classList.add('hidden');
         toggleSidebar();
 
-        // Fly to the selected location
         map.flyTo([lat, lng], 14, {
             duration: 1,
             easeLinearity: 0.25
         });
 
-        // Remove any existing search marker
-        if (searchMarker) {
-            map.removeLayer(searchMarker);
-        }
+        if (searchMarker) map.removeLayer(searchMarker);
 
-        // Add a new marker
         searchMarker = L.marker([lat, lng], {
             icon: L.divIcon({
                 className: 'custom-marker',
-                html: '<i class="fas fa-map-pin"></i>'
+                html: '<i class="fas fa-map-pin"></i>',
+                iconSize: [24, 24]
             })
         }).addTo(map);
 
-        // Save to search history
         saveSearchToHistory(item);
-
-        // Show the remove marker button
         removeMarkerBtn.classList.remove('hidden');
     }
 
@@ -469,9 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let currentIndex = -1;
             items.forEach((item, index) => {
-                if (item === document.activeElement) {
-                    currentIndex = index;
-                }
+                if (item === document.activeElement) currentIndex = index;
             });
 
             if (e.key === 'ArrowDown') {
@@ -483,9 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else if (e.key === 'Enter') {
             const activeItem = searchResults.querySelector('a:focus');
-            if (activeItem) {
-                activeItem.click();
-            }
+            if (activeItem) activeItem.click();
         }
     });
 });
