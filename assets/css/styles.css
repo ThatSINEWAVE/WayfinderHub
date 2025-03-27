@@ -14,8 +14,12 @@ body {
     background-color: #111827;
 }
 
+.carto-dark-tile {
+    filter: none !important;
+}
+
 /* Leaflet Map Overrides for Dark Mode */
-.dark .leaflet-tile {
+.dark .leaflet-tile:not(.carto-dark-tile) {
     filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
 }
 
