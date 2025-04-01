@@ -1,471 +1,141 @@
-/* Global Styles */
+/* Base Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-	font-family: 'Inter', sans-serif;
-	@apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
+    @apply font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 overflow-hidden;
 }
 
-/* Map Container */
-#map {
-    background-color: #f8fafc;
-    transition: background-color 0.3s ease;
+/* Sidebar Scrollbar */
+#sidebar .overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.gray.300') theme('colors.gray.100');
 }
-
-.dark #map {
-    background-color: #111827;
+#sidebar .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
 }
-
-.carto-dark-tile {
-    filter: none !important;
+#sidebar .overflow-y-auto::-webkit-scrollbar-track {
+    background: theme('colors.gray.100');
+    @apply dark:bg-gray-700;
+    border-radius: 3px;
 }
-
-/* Leaflet Map Overrides for Dark Mode */
-.dark .leaflet-tile:not(.carto-dark-tile) {
-    filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
-}
-
-.dark .leaflet-container {
-    background-color: #111827;
-}
-
-.dark .leaflet-control-attribution {
-	background-color: rgba(17, 24, 39, 0.8);
-	color: #e5e7eb;
-}
-
-.dark .leaflet-popup-content-wrapper,
-.dark .leaflet-popup-tip {
-	background-color: #1f2937;
-	color: #f3f4f6;
-}
-
-.dark .leaflet-bar a {
-	background-color: #1f2937;
-	color: #f3f4f6;
-	border-bottom: 1px solid #374151;
-}
-
-.dark .leaflet-bar a:hover {
-	background-color: #374151;
-}
-
-/* Logo and Locate Button Circles */
-.logo-circle,
-.locate-circle {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	aspect-ratio: 1/1;
-	border-radius: 50%;
-	transition: all 0.3s ease;
+#sidebar .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: theme('colors.gray.400');
+    @apply dark:bg-gray-500;
+    border-radius: 3px;
 }
 
 /* Hamburger Menu Animation */
 .hamburger-line {
-	transition: all 0.3s ease;
-	transform-origin: center;
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+}
+.hamburger-wrapper.active .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.hamburger-wrapper.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+.hamburger-wrapper.active .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
-.hamburger-btn.active .hamburger-line:nth-child(1) {
-	transform: translateY(7px) rotate(45deg);
+/* Map Container */
+#map {
+    outline: none;
 }
 
-.hamburger-btn.active .hamburger-line:nth-child(2) {
-	opacity: 0;
-	transform: scaleX(0);
+/* Improved Map Controls */
+.map-controls-container {
+    @apply fixed bottom-5 right-5 z-10 flex flex-col space-y-3;
 }
 
-.hamburger-btn.active .hamburger-line:nth-child(3) {
-	transform: translateY(-7px) rotate(-45deg);
+.map-control-button {
+    @apply w-12 h-12 flex items-center justify-center bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-full shadow-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800 transition-all duration-200 active:scale-95;
 }
 
-/* Sidebar Styling */
-#sidebar {
-	position: fixed;
-	top: 4rem;
-	left: 0;
-	bottom: 0;
-	width: 80%;
-	max-width: 400px;
-	background-color: white;
-	z-index: 40;
-	transform: translateX(-100%);
-	transition: transform 0.3s ease-in-out;
-	box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-	overflow-y: auto;
-	@apply dark:bg-gray-800 dark:border-r dark:border-gray-700;
+.map-control-button i {
+    @apply text-lg;
 }
 
-#sidebar.open {
-	transform: translateX(0);
+#center-map {
+    @apply bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600;
 }
 
-#sidebar-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 35;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.3s ease-in-out;
-	backdrop-filter: blur(2px);
+#center-map:disabled {
+    @apply bg-primary-400 dark:bg-primary-700 cursor-not-allowed opacity-80;
 }
 
-#sidebar-overlay.visible {
-	opacity: 1;
-	pointer-events: auto;
+.control-divider {
+    @apply w-8 h-px bg-gray-200 dark:bg-gray-600 mx-auto;
 }
 
-#sidebar .p-6 {
-	padding-top: 2.5rem;
+/* Leaflet Popups */
+.leaflet-popup-content-wrapper {
+    @apply bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-xl rounded-lg border border-gray-200 dark:border-gray-600;
+    padding: 12px 16px;
+}
+.leaflet-popup-tip {
+    @apply bg-white dark:bg-gray-700;
 }
 
-/* Header Styling */
-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0.5rem 1rem;
-	position: relative;
-	z-index: 50;
-	background-color: white;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	@apply dark:bg-gray-800 dark:shadow-gray-900/20;
+/* Context Menu */
+#custom-context-menu {
+    @apply bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl shadow-2xl py-2 text-sm min-w-[220px] border border-gray-200 dark:border-gray-700 hidden;
+    animation: fadeInContextMenu 0.15s ease-out forwards;
 }
 
-header h1 {
-	background: linear-gradient(90deg, #3b82f6, #10b981);
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
-	letter-spacing: -0.5px;
+.context-menu-item {
+    @apply flex items-center w-full px-4 py-3 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50 focus:outline-none transition-colors duration-100 cursor-pointer;
 }
 
-/* Logo and Title Styling */
-header .flex.items-center.space-x-2 {
-	margin-left: 0.5rem;
+.context-menu-item i {
+    @apply w-5 mr-3 text-center text-gray-500 dark:text-gray-400;
 }
 
-header img {
-	transition: transform 0.3s ease;
-	margin-right: 5px;
+.context-menu-divider {
+    @apply border-t border-gray-200 dark:border-gray-700 my-1 mx-3;
 }
 
-header img:hover {
-	transform: scale(1.1);
+@keyframes fadeInContextMenu {
+    from { opacity: 0; transform: translateY(-5px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Theme Toggle Button */
-#theme-toggle {
-	position: relative;
-	width: 2.5rem;
-	height: 2.5rem;
+/* Measurement Tools */
+.measurement-marker {
+    @apply shadow-md;
 }
 
-.theme-icon i {
-	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+.measurement-line {
+    @apply shadow-sm;
 }
 
-/* Centered Search Bar for Desktop */
-@media (min-width: 769px) {
-	header .container {
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		align-items: center;
-	}
-
-	header .logo-container {
-		justify-self: start;
-	}
-
-	header .search-container {
-		justify-self: center;
-		max-width: 600px;
-		width: 100%;
-	}
-
-	header .actions-container {
-		justify-self: end;
-	}
+.measurement-tooltip {
+    @apply bg-gray-800/90 text-white font-medium text-sm px-3 py-1.5 rounded-lg shadow-md border-none;
 }
 
-/* Responsive Sizing and Positioning */
-@media (max-width: 768px) {
-	.logo-circle,
-	.locate-circle {
-		width: 2.5rem;
-		height: 2.5rem;
-	}
-
-	.logo-circle i,
-	.locate-circle i {
-		font-size: 1rem;
-	}
-
-	header {
-		padding: 0.5rem 0;
-	}
-
-	header .flex.items-center.justify-start {
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
-	}
-
-	header h1 {
-		font-size: 1.1rem;
-	}
-
-	header img {
-		height: 1.75rem;
-		width: 1.75rem;
-	}
-
-	#search-box {
-		font-size: 0.875rem;
-		padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-	}
-
-	.container {
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
-	}
-
-	#sidebar {
-		width: 100%;
-		max-width: none;
-	}
+.measurement-tooltip-total {
+    @apply bg-primary-600/90;
 }
 
-@media (min-width: 769px) {
-	.logo-circle,
-	.locate-circle {
-		width: 3rem;
-		height: 3rem;
-	}
-
-	.logo-circle i,
-	.locate-circle i {
-		font-size: 1.25rem;
-	}
+/* Loading Indicator */
+#loading {
+    @apply bg-gray-900/50 dark:bg-gray-900/70 backdrop-blur-sm;
 }
 
-/* Positioning for Hamburger Button */
-#toggle-sidebar {
-	position: relative;
-	width: 2.5rem;
-	height: 2.5rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	transition: all 0.3s ease;
-	margin-left: 0;
-	padding: 0;
-}
-
-#toggle-sidebar:hover {
-	background-color: rgba(0, 0, 0, 0.05);
-	@apply dark:bg-gray-700;
-}
-
-header h1,
-#sidebar h1 {
-	font-size: 1.25rem;
-	font-weight: 700;
-	color: #1f2937;
-	@apply dark:text-gray-100;
-}
-
-/* Search Results Styling */
+/* Search Results */
 #search-results {
-	position: relative;
-	z-index: 10;
-	max-height: 20rem;
-	overflow-y: auto;
-	border-radius: 0.75rem;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-	animation: fadeIn 0.3s ease-out;
-	border: 1px solid rgba(0, 0, 0, 0.05);
-	background-color: white;
-	@apply dark:bg-gray-700 dark:border-gray-600;
+    animation: slideDownFadeIn 0.2s ease-out forwards;
 }
 
-.search-container {
-	position: relative;
-	margin-top: 2rem;
+@keyframes slideDownFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-#search-results a {
-	display: flex;
-	align-items: center;
-	padding: 0.75rem 1rem;
-	color: #374151;
-	text-decoration: none;
-	transition: all 0.2s ease;
-	font-size: 0.875rem;
-	position: relative;
-	overflow: hidden;
-	@apply dark:text-gray-200;
-}
-
-#search-results a::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 0;
-	height: 100%;
-	background-color: rgba(59, 130, 246, 0.1);
-	transition: width 0.3s ease;
-	z-index: -1;
-}
-
-#search-results a:hover::before {
-	width: 100%;
-}
-
-#search-results a:focus {
-	outline: 2px solid rgba(59, 130, 246, 0.5);
-	outline-offset: -2px;
-}
-
-#search-results a .search-result-icon {
-	margin-right: 0.75rem;
-	color: #3b82f6;
-	opacity: 0.7;
-}
-
-#search-results a .search-result-details {
-	flex-grow: 1;
-}
-
-#search-results a .search-result-details strong {
-	display: block;
-	font-weight: 600;
-}
-
-#search-results a .search-result-details small {
-	display: block;
-	color: #6b7280;
-	font-size: 0.75rem;
-	margin-top: 0.25rem;
-	@apply dark:text-gray-400;
-}
-
-#search-results .no-results {
-	padding: 1rem;
-	text-align: center;
-	color: #6b7280;
-	font-style: italic;
-	@apply dark:text-gray-400;
-}
-
-/* Map Controls */
-#map-controls button {
-	background-color: white;
-	border-radius: 50%;
-	padding: 0.5rem;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	transition: all 0.3s ease;
-	@apply dark:bg-gray-700;
-}
-
-#map-controls button:hover {
-	transform: scale(1.1);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Custom Map Marker Styles */
-.marker-cluster-small {
-	background-color: rgba(59, 130, 246, 0.6);
-	border-radius: 50%;
-}
-
-.marker-cluster-small div {
-	background-color: rgba(59, 130, 246, 0.8);
-	color: white;
-	font-weight: bold;
-}
-
-.custom-marker {
-	background-color: #3b82f6;
-	border-radius: 50%;
-	border: 3px solid white;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	width: 24px;
-	height: 24px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: white;
-	font-size: 12px;
-	font-weight: bold;
-	transition: all 0.3s ease;
-}
-
-.custom-marker:hover {
-	transform: scale(1.1);
-	box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Locate Button Animation */
-@keyframes pulseGlow {
-	0% {
-		box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
-	}
-
-	70% {
-		box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
-	}
-
-	100% {
-		box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-	}
-}
-
-.locate-active {
-	animation: pulseGlow 2s infinite;
-}
-
-/* Enhanced Scrollbar for Search Results */
-#search-results::-webkit-scrollbar {
-	width: 6px;
-}
-
-#search-results::-webkit-scrollbar-track {
-	background: #f1f1f1;
-	border-radius: 10px;
-	@apply dark:bg-gray-600;
-}
-
-#search-results::-webkit-scrollbar-thumb {
-	background: #888;
-	border-radius: 10px;
-}
-
-#search-results::-webkit-scrollbar-thumb:hover {
-	background: #555;
-}
-
-/* Responsive Adjustments for Sidebar */
-@media (max-width: 768px) {
-	#sidebar {
-		width: 100%;
-		max-width: none;
-		top: 3.5rem;
-	}
+/* Remove sidebar overlay darkening */
+#sidebar-overlay {
+    @apply bg-transparent pointer-events-none;
 }

@@ -5,146 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WayfinderHub - Global Exploration</title>
     <meta name="description" content="An intuitive mapping application for global exploration">
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicons/favicon.ico" sizes="any">
+    <link rel="icon" href="images/logo/icon.png" type="image/png"> <!-- Corrected Path -->
+    <link rel="apple-touch-icon" href="images/apple/apple-touch-icon.png">
+    <!-- Web Manifest -->
+    <link rel="manifest" href="site-data/site.manifest">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Tailwind CSS (via CDN for simplicity) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // Enable class-based dark mode
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'], // Use Inter as default
+            },
+            colors: { // Optional: define custom colors if needed
+                'primary': {
+                    '50': '#eff6ff',
+                    '100': '#dbeafe',
+                    '200': '#bfdbfe',
+                    '300': '#93c5fd',
+                    '400': '#60a5fa',
+                    '500': '#3b82f6',
+                    '600': '#2563eb',
+                    '700': '#1d4ed8',
+                    '800': '#1e40af',
+                    '900': '#1e3a8a',
+                    '950': '#172554'
+                  }
+            }
+          }
+        }
+      }
+    </script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Favicon for all browsers -->
-    <link rel="icon" href="images/favicons/favicon.ico" type="image/x-icon">
-    <!-- Apple Touch Icons (for iOS home screen bookmarks) -->
-    <link rel="apple-touch-icon" sizes="57x57" href="images/apple/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/apple/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/apple/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/apple/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/apple/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/apple/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple/apple-icon-180x180.png">
-    <!-- Favicons for different devices -->
-    <link rel="icon" type="image/png" sizes="192x192" href="images/android/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
-    <!-- Web Manifest -->
-    <link rel="manifest" href="site-data/site.manifest">
-    <!-- Windows-specific tiles (for pinned sites in Windows Start menu) -->
+    <!-- Meta Tags -->
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="images/microsoft/ms-icon-144x144.png">
-    <!-- Defines the color of the browser UI elements -->
     <meta name="theme-color" content="#ffffff">
-    <!-- Open Graph Meta Tags (for social media sharing, mainly Facebook) -->
     <meta property="og:title" content="WayfinderHub - Home">
     <meta property="og:description" content="A beautiful map exploration tool powered by Leaflet.js">
     <meta property="og:image" content="https://raw.githubusercontent.com/ThatSINEWAVE/WayfinderHub/refs/heads/main/images/social-share/WayfinderHub-Home.png">
     <meta property="og:url" content="https://thatsinewave.github.io/WayfinderHub/index.html">
     <meta property="og:type" content="website">
-    <!-- Twitter Card Meta Tags (for better sharing on Twitter) -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="WayfinderHub - Home">
-    <meta name="twitter:description" content="A beautiful map exploration tool powered by Leaflet.js">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/ThatSINEWAVE/WayfinderHub/refs/heads/main/images/social-share/WayfinderHub-Home.png">
+    <!-- Add other meta tags as needed -->
   </head>
-  <body class="bg-gray-50 dark:bg-gray-900 font-inter overflow-hidden">
-    <!-- Header with Hamburger Menu -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-md dark:shadow-gray-900/20 transition-colors duration-300">
-      <div class="flex items-center justify-between px-4 py-3">
+  <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+    <!-- Header -->
+    <header id="app-header" class="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="flex items-center justify-between px-4 h-full">
         <div class="flex items-center space-x-3">
           <!-- Hamburger Menu Button -->
-          <button id="toggle-sidebar" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
-            <span class="hamburger-btn flex flex-col justify-center items-center space-y-1.5 group w-6 h-6">
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 group-hover:bg-blue-600"></span>
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 group-hover:bg-blue-600"></span>
-              <span class="hamburger-line w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 group-hover:bg-blue-600"></span>
+          <button id="toggle-sidebar" title="Toggle Sidebar" class="hamburger-wrapper h-9 w-9 flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800 transition-colors duration-150">
+            <span class="sr-only">Toggle Sidebar</span>
+            <span class="hamburger-btn flex flex-col justify-center items-center space-y-[5px] group w-5 h-5">
+              <span class="hamburger-line w-5 h-[2px] bg-gray-600 dark:bg-gray-400 group-hover:bg-primary-600 dark:group-hover:bg-primary-400"></span>
+              <span class="hamburger-line w-5 h-[2px] bg-gray-600 dark:bg-gray-400 group-hover:bg-primary-600 dark:group-hover:bg-primary-400"></span>
+              <span class="hamburger-line w-5 h-[2px] bg-gray-600 dark:bg-gray-400 group-hover:bg-primary-600 dark:group-hover:bg-primary-400"></span>
             </span>
           </button>
           <!-- Logo and Project Name -->
-          <div class="flex items-center space-x-2">
-            <img src="images/logo/icon.png" alt="WayfinderHub Logo" class="h-8 w-8">
-            <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">WayfinderHub</h1>
+          <div class="flex items-center space-x-2 select-none">
+            <img src="images/logo/icon.png" alt="WayfinderHub Logo" class="h-7 w-7">
+            <h1 class="text-lg font-semibold text-gray-800 dark:text-gray-100">WayfinderHub</h1>
           </div>
         </div>
         <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
-          <span class="theme-icon absolute inset-0 flex items-center justify-center transition-all duration-500">
-            <i class="fas fa-sun text-yellow-400 opacity-100 dark:opacity-0 dark:rotate-90"></i>
-            <i class="fas fa-moon text-blue-300 opacity-0 dark:opacity-100 absolute dark:rotate-0 rotate-90"></i>
+        <button id="theme-toggle" title="Toggle Theme" class="h-9 w-9 rounded-md flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800 transition-colors duration-150">
+          <span class="sr-only">Toggle Theme</span>
+          <span class="theme-icon relative w-5 h-5">
+            <i class="fas fa-sun absolute inset-0 flex items-center justify-center text-yellow-500 opacity-100 dark:opacity-0 transform transition-all duration-300 dark:-rotate-90 scale-100 dark:scale-0"></i>
+            <i class="fas fa-moon absolute inset-0 flex items-center justify-center text-primary-300 opacity-0 dark:opacity-100 transform rotate-90 dark:rotate-0 transition-all duration-300 scale-0 dark:scale-100"></i>
           </span>
         </button>
       </div>
     </header>
     <!-- Sidebar -->
-    <div id="sidebar" class="fixed top-0 left-0 bottom-0 w-80 bg-white dark:bg-gray-800 shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto dark:border-r dark:border-gray-700">
-      <div class="p-6 pt-16">
-        <!-- Search Container -->
-        <div class="mb-6">
-          <div class="relative w-full">
-            <input type="text" id="search-box" class="w-full pl-10 pr-12 py-3 rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm text-gray-700 dark:text-gray-200 dark:bg-gray-700 transition-all duration-300 ease-in-out" placeholder="Search places...">
-            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300">
-              <i class="fas fa-search"></i>
-            </div>
-            <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hidden transition-colors">
-              <i class="fas fa-times"></i>
-            </button>
+    <div id="sidebar" class="fixed top-0 left-0 bottom-0 w-[340px] bg-white dark:bg-gray-800 shadow-xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-gray-200 dark:border-gray-700 flex flex-col">
+      <div class="pt-14 h-full flex flex-col">
+          <div class="p-4 flex-grow overflow-y-auto">
+              <div class="mb-5 relative group">
+                  <label for="search-box" class="sr-only">Search Places</label>
+                  <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none group-focus-within:text-primary-600 dark:group-focus-within:text-primary-400 transition-colors">
+                      <i class="fas fa-search text-sm"></i>
+                  </div>
+                  <input type="text" id="search-box" class="w-full pl-9 pr-10 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition duration-150 ease-in-out" placeholder="Search places...">
+                  <button id="clear-search" title="Clear Search" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hidden transition-colors p-1">
+                      <span class="sr-only">Clear Search</span>
+                      <i class="fas fa-times text-sm"></i>
+                  </button>
+                  <div id="search-results" class="absolute mt-1.5 w-full bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 max-h-80 overflow-y-auto z-10 hidden divide-y divide-gray-100 dark:divide-gray-600">
+                  </div>
+              </div>
+              <div class="mt-6">
+                  <div class="flex justify-between items-center mb-3 px-1">
+                      <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Recent Searches</h2>
+                      <button id="clear-search-history" class="text-xs text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium transition-colors hidden">Clear</button>
+                  </div>
+                  <div id="search-history" class="space-y-1.5">
+                      {/* Dynamic history items here */}
+                      <p class="text-sm text-gray-500 dark:text-gray-400 italic px-3 py-2" id="no-history-message">No recent searches.</p>
+                  </div>
+              </div>
           </div>
-          <div id="search-results" class="mt-2 w-full bg-white dark:bg-gray-700 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-600 max-h-96 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-600"></div>
-        </div>
-        <!-- Search History Section -->
-        <div>
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Recent Searches</h2>
-            <button id="clear-search-history" class="text-sm text-red-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"> Clear History </button>
-          </div>
-          <div id="search-history" class="space-y-2">
-            <!-- Search history items will be dynamically added here -->
-          </div>
-        </div>
       </div>
     </div>
-    <!-- Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-35 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <!-- Sidebar Overlay (Blur removed) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/30 dark:bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300"></div>
     <!-- Map Container -->
-    <div id="map" class="fixed top-16 bottom-0 left-0 right-0 z-0 dark:bg-gray-900"></div>
+    <div id="map" class="absolute inset-0 z-0 dark:bg-gray-950"></div>
     <!-- Map Controls -->
-    <div class="fixed bottom-4 right-4 z-40 space-y-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-2xl p-1 dark:shadow-gray-900/20">
-      <button id="zoom-in" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-700 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 group">
-        <i class="fas fa-plus text-gray-700 dark:text-gray-200 text-sm group-hover:scale-110 transition-transform"></i>
+    <div class="fixed bottom-5 right-5 z-10 flex flex-col space-y-1 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 dark:border-gray-700/50 p-1">
+      <button id="zoom-in" title="Zoom In" class="map-control-button group">
+        <span class="sr-only">Zoom In</span>
+        <i class="fas fa-plus text-base group-hover:scale-110 transition-transform"></i>
       </button>
-      <div class="border-t border-gray-200 dark:border-gray-600 w-full"></div>
-      <button id="zoom-out" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-700 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 group">
-        <i class="fas fa-minus text-gray-700 dark:text-gray-200 text-sm group-hover:scale-110 transition-transform"></i>
+      <div class="border-t border-gray-200 dark:border-gray-600/50 mx-1 my-0.5"></div>
+      <button id="zoom-out" title="Zoom Out" class="map-control-button group">
+        <span class="sr-only">Zoom Out</span>
+        <i class="fas fa-minus text-base group-hover:scale-110 transition-transform"></i>
       </button>
-      <div class="border-t border-gray-200 dark:border-gray-600 w-full"></div>
-      <button id="center-map" class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all duration-300 group">
-        <i class="fas fa-location-arrow text-sm group-hover:animate-pulse"></i>
+      <div class="border-t border-gray-200 dark:border-gray-600/50 mx-1 my-0.5"></div>
+      <button id="center-map" title="Center on My Location" class="map-control-button bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 focus:ring-primary-500 group">
+        <span class="sr-only">Center on My Location</span>
+        <i class="fas fa-location-crosshairs text-base group-hover:animate-pulse"></i>
       </button>
     </div>
     <!-- Remove Marker Button -->
-    <button id="remove-marker" class="fixed bottom-4 left-4 z-40 px-3 py-2 bg-white dark:bg-gray-700 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 flex items-center space-x-2 hidden">
-      <i class="fas fa-trash-alt text-red-500 text-sm"></i>
-      <span class="text-gray-700 dark:text-gray-200 text-xs">Remove Marker</span>
+    <button id="remove-marker" title="Remove Search Marker" class="fixed bottom-5 left-5 z-10 px-3 py-1.5 bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 dark:border-gray-600/50 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-150 flex items-center space-x-2 hidden text-xs font-medium">
+      <i class="fas fa-times text-red-500 text-sm"></i>
+      <span class="text-gray-700 dark:text-gray-200">Remove Marker</span>
     </button>
     <!-- Loading Indicator -->
-    <div id="loading" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl flex flex-col items-center space-y-4">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-blue-500"></div>
-        <span class="text-gray-700 dark:text-gray-200 font-semibold tracking-wide text-sm">Discovering Your Location...</span>
+    <div id="loading" class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-800/60 backdrop-blur-sm transition-opacity duration-300 hidden">
+      <div class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-xl flex flex-col items-center space-y-3">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
+        <span id="loading-text" class="text-gray-700 dark:text-gray-200 font-medium text-sm tracking-wide">Loading Map...</span>
       </div>
     </div>
-    <!-- Custom JS -->
-    <script src="assets/js/app.js"></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-      }
-    </script>
+    <!-- Custom Context Menu (Structure only, content added dynamically) -->
+    <div id="custom-context-menu" class="absolute z-[1000] bg-white dark:bg-gray-800 rounded-lg shadow-xl py-1.5 text-sm min-w-[200px] border border-gray-200 dark:border-gray-600 hidden">
+        <!-- Menu items added by JS -->
+    </div>
+    <!-- Scripts -->
     <!-- Leaflet JS -->
-    <script src="assets/js/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Custom JS -->
+    <script src="assets/js/context-menu.js"></script> <!-- Load context menu first -->
+    <script src="assets/js/app.js"></script>         <!-- Load main app logic last -->
+
   </body>
 </html>
