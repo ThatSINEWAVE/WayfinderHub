@@ -20,14 +20,46 @@ function initializeContextMenu(map, appControls) {
     let pointMarkers = [];
 
     const MARKER_OPTIONS = {
-        start: { radius: 7, fillColor: "#2563eb", color: "#ffffff", weight: 2, opacity: 1, fillOpacity: 0.9 },
-        intermediate: { radius: 6, fillColor: "#f97316", color: "#ffffff", weight: 2, opacity: 1, fillOpacity: 0.9 },
-        temp: { radius: 6, fillColor: "#f97316", color: "#ffffff", weight: 2, opacity: 0.7, fillOpacity: 0.7 }
+        start: {
+            radius: 7,
+            fillColor: "#2563eb",
+            color: "#ffffff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9
+        },
+        intermediate: {
+            radius: 6,
+            fillColor: "#f97316",
+            color: "#ffffff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9
+        },
+        temp: {
+            radius: 6,
+            fillColor: "#f97316",
+            color: "#ffffff",
+            weight: 2,
+            opacity: 0.7,
+            fillOpacity: 0.7
+        }
     };
 
     const LINE_OPTIONS = {
-        main: { color: '#f97316', weight: 4, opacity: 0.9, className: 'measurement-line' },
-        temp: { color: '#f97316', weight: 3, opacity: 0.7, dashArray: '5, 5', className: 'measurement-line' }
+        main: {
+            color: '#f97316',
+            weight: 4,
+            opacity: 0.9,
+            className: 'measurement-line'
+        },
+        temp: {
+            color: '#f97316',
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '5, 5',
+            className: 'measurement-line'
+        }
     };
 
     // Menu Item Creation
@@ -125,7 +157,11 @@ function initializeContextMenu(map, appControls) {
 
         // Add start marker
         const startMarker = L.circleMarker(clickedLatLng, MARKER_OPTIONS.start)
-            .bindTooltip("Start point", { permanent: true, direction: 'top', className: 'measurement-tooltip' })
+            .bindTooltip("Start point", {
+                permanent: true,
+                direction: 'top',
+                className: 'measurement-tooltip'
+            })
             .addTo(measurementLayer);
         pointMarkers.push(startMarker);
 
@@ -224,7 +260,7 @@ function initializeContextMenu(map, appControls) {
     const calculateTotalDistance = () => {
         let total = 0;
         for (let i = 1; i < measuredPoints.length; i++) {
-            total += map.distance(measuredPoints[i-1], measuredPoints[i]);
+            total += map.distance(measuredPoints[i - 1], measuredPoints[i]);
         }
         return total;
     };

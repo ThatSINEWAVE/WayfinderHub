@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateMapPadding();
 
         if (typeof initializeContextMenu === 'function') {
-            initializeContextMenu(map, { showLoading });
+            initializeContextMenu(map, {
+                showLoading
+            });
         } else {
             console.error("initializeContextMenu function not found. Ensure context-menu.js is loaded correctly.");
         }
@@ -131,7 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isDark = document.documentElement.classList.contains('dark');
         const newTileUrl = isDark ? DARK_TILE_URL : LIGHT_TILE_URL;
 
-        const tileOptions = { ...TILE_LAYER_OPTIONS };
+        const tileOptions = {
+            ...TILE_LAYER_OPTIONS
+        };
         if (newTileUrl.includes('cartocdn.com')) {
             tileOptions.subdomains = 'abcd';
         } else if (newTileUrl.includes('tile.openstreetmap.org')) {
@@ -185,14 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         sidebar.classList.toggle('translate-x-0', isOpen);
         sidebar.classList.toggle('-translate-x-full', !isOpen);
-        sidebarOverlay.classList.toggle('opacity-100', isOpen);
-        sidebarOverlay.classList.toggle('pointer-events-auto', isOpen);
-        sidebarOverlay.classList.toggle('pointer-events-none', !isOpen);
         hamburgerWrapper.classList.toggle('active', isOpen);
-
-        if (!isOpen) {
-            searchResultsContainer.classList.add('hidden');
-        }
 
         setTimeout(() => {
             if (map) map.invalidateSize();
@@ -203,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
         e.stopPropagation();
         toggleSidebar();
     });
-    sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
 
     // --- Location Finding ---
     const getUserLocation = () => {
@@ -241,7 +237,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.ok ? response.json() : Promise.reject('IP API Error'))
             .then(data => {
                 if (data && data.latitude && data.longitude) {
-                    userLocation = { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude) };
+                    userLocation = {
+                        lat: parseFloat(data.latitude),
+                        lng: parseFloat(data.longitude)
+                    };
                     map.flyTo([userLocation.lat, userLocation.lng], 10);
                     updateUserLocationMarker();
                     hideLoading();
@@ -293,7 +292,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
                     map.flyTo([userLocation.lat, userLocation.lng], GEOLOCATION_ZOOM);
                     updateUserLocationMarker();
                     hideLoading();
@@ -303,7 +305,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error("Precise geolocation failed:", error.message);
                     handleLocationError("Could not get precise location.");
                     resetCenterButton();
-                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
             );
         } else {
             handleLocationError("Geolocation not supported.");
@@ -416,7 +422,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const controller = new AbortController();
             nominatimXHR = controller;
 
-            const response = await fetch(url, { signal: controller.signal });
+            const response = await fetch(url, {
+                signal: controller.signal
+            });
 
             if (!response.ok) {
                 throw new Error(`Nominatim API Error: ${response.status} ${response.statusText}`);
@@ -488,55 +496,90 @@ document.addEventListener('DOMContentLoaded', function() {
 
         switch (classType) {
             case 'place:city':
-            case 'place:town': return 'fas fa-city';
+            case 'place:town':
+                return 'fas fa-city';
             case 'place:village':
             case 'place:hamlet':
             case 'place:suburb':
-            case 'place:neighbourhood': return 'fas fa-house-chimney-window';
-            case 'boundary:administrative': return (type === 'country') ? 'fas fa-flag' : 'fas fa-landmark-flag';
-            case 'amenity:restaurant': return 'fas fa-utensils';
-            case 'amenity:cafe': return 'fas fa-mug-saucer';
+            case 'place:neighbourhood':
+                return 'fas fa-house-chimney-window';
+            case 'boundary:administrative':
+                return (type === 'country') ? 'fas fa-flag' : 'fas fa-landmark-flag';
+            case 'amenity:restaurant':
+                return 'fas fa-utensils';
+            case 'amenity:cafe':
+                return 'fas fa-mug-saucer';
             case 'amenity:bar':
-            case 'amenity:pub': return 'fas fa-beer-mug-empty';
-            case 'amenity:bank': return 'fas fa-landmark';
-            case 'amenity:hospital': return 'fas fa-hospital';
-            case 'amenity:clinic': return 'fas fa-clinic-medical';
-            case 'amenity:pharmacy': return 'fas fa-pills';
+            case 'amenity:pub':
+                return 'fas fa-beer-mug-empty';
+            case 'amenity:bank':
+                return 'fas fa-landmark';
+            case 'amenity:hospital':
+                return 'fas fa-hospital';
+            case 'amenity:clinic':
+                return 'fas fa-clinic-medical';
+            case 'amenity:pharmacy':
+                return 'fas fa-pills';
             case 'amenity:school':
             case 'amenity:kindergarten':
             case 'amenity:college':
-            case 'amenity:university': return 'fas fa-graduation-cap';
-            case 'amenity:post_office': return 'fas fa-envelope';
-            case 'amenity:police': return 'fas fa-shield-halved';
-            case 'amenity:fire_station': return 'fas fa-fire-extinguisher';
-            case 'amenity:parking': return 'fas fa-square-parking';
-            case 'amenity:fuel': return 'fas fa-gas-pump';
-            case 'amenity:atm': return 'fas fa-money-bill-wave';
-            case 'shop:supermarket': return 'fas fa-cart-shopping';
-            case 'shop:convenience': return 'fas fa-store';
-            case 'shop:clothes': return 'fas fa-shirt';
-            case 'shop:bakery': return 'fas fa-bread-slice';
+            case 'amenity:university':
+                return 'fas fa-graduation-cap';
+            case 'amenity:post_office':
+                return 'fas fa-envelope';
+            case 'amenity:police':
+                return 'fas fa-shield-halved';
+            case 'amenity:fire_station':
+                return 'fas fa-fire-extinguisher';
+            case 'amenity:parking':
+                return 'fas fa-square-parking';
+            case 'amenity:fuel':
+                return 'fas fa-gas-pump';
+            case 'amenity:atm':
+                return 'fas fa-money-bill-wave';
+            case 'shop:supermarket':
+                return 'fas fa-cart-shopping';
+            case 'shop:convenience':
+                return 'fas fa-store';
+            case 'shop:clothes':
+                return 'fas fa-shirt';
+            case 'shop:bakery':
+                return 'fas fa-bread-slice';
             case 'tourism:hotel':
             case 'tourism:motel':
-            case 'tourism:guest_house': return 'fas fa-hotel';
-            case 'tourism:museum': return 'fas fa-landmark-dome';
+            case 'tourism:guest_house':
+                return 'fas fa-hotel';
+            case 'tourism:museum':
+                return 'fas fa-landmark-dome';
             case 'tourism:attraction':
-            case 'tourism:viewpoint': return 'fas fa-binoculars';
-            case 'tourism:information': return 'fas fa-circle-info';
-            case 'highway:bus_stop': return 'fas fa-bus-simple';
-            case 'railway:station': return 'fas fa-train';
-            case 'railway:subway_entrance': return 'fas fa-subway';
+            case 'tourism:viewpoint':
+                return 'fas fa-binoculars';
+            case 'tourism:information':
+                return 'fas fa-circle-info';
+            case 'highway:bus_stop':
+                return 'fas fa-bus-simple';
+            case 'railway:station':
+                return 'fas fa-train';
+            case 'railway:subway_entrance':
+                return 'fas fa-subway';
             case 'aeroway:aerodrome':
-            case 'aeroway:airport': return 'fas fa-plane';
-            case 'natural:peak': return 'fas fa-mountain-sun';
-            case 'natural:tree': return 'fas fa-tree';
+            case 'aeroway:airport':
+                return 'fas fa-plane';
+            case 'natural:peak':
+                return 'fas fa-mountain-sun';
+            case 'natural:tree':
+                return 'fas fa-tree';
             case 'natural:water':
             case 'waterway:river':
-            case 'natural:coastline': return 'fas fa-water';
-            case 'natural:beach': return 'fas fa-umbrella-beach';
+            case 'natural:coastline':
+                return 'fas fa-water';
+            case 'natural:beach':
+                return 'fas fa-umbrella-beach';
             case 'building:house':
-            case 'building:residential': return 'fas fa-home';
-            case 'building:apartments': return 'fas fa-building';
+            case 'building:residential':
+                return 'fas fa-home';
+            case 'building:apartments':
+                return 'fas fa-building';
             case 'highway:motorway':
             case 'highway:trunk':
             case 'highway:primary':
@@ -544,15 +587,27 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'highway:tertiary':
             case 'highway:residential':
             case 'highway:road':
-            case 'highway:unclassified': return 'fas fa-road';
+            case 'highway:unclassified':
+                return 'fas fa-road';
         }
         switch (type) {
-            case 'administrative': return 'fas fa-landmark-flag';
-            case 'residential': return 'fas fa-building';
-            case 'road': case 'street': return 'fas fa-road';
-            case 'building': return 'far fa-building';
-            case 'motorway': case 'trunk': case 'primary': case 'secondary': case 'tertiary': return 'fas fa-road';
-            default: return 'fas fa-map-marker-alt';
+            case 'administrative':
+                return 'fas fa-landmark-flag';
+            case 'residential':
+                return 'fas fa-building';
+            case 'road':
+            case 'street':
+                return 'fas fa-road';
+            case 'building':
+                return 'far fa-building';
+            case 'motorway':
+            case 'trunk':
+            case 'primary':
+            case 'secondary':
+            case 'tertiary':
+                return 'fas fa-road';
+            default:
+                return 'fas fa-map-marker-alt';
         }
     };
 
@@ -572,7 +627,9 @@ document.addEventListener('DOMContentLoaded', function() {
         searchResultsContainer.classList.add('hidden');
         clearSearchBtn.classList.remove('hidden');
 
-        map.flyTo([lat, lng], SEARCH_FLY_ZOOM, { duration: 1.0 });
+        map.flyTo([lat, lng], SEARCH_FLY_ZOOM, {
+            duration: 1.0
+        });
 
         removeSearchMarker();
 
@@ -663,7 +720,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
                 items[prevIndex]?.focus();
             } else if (e.key === 'Enter') {
-                if(document.activeElement === searchBox && items.length > 0) {
+                if (document.activeElement === searchBox && items.length > 0) {
                     e.preventDefault();
                     items[0].focus();
                 }
